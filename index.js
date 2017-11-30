@@ -28,10 +28,17 @@ app.use(bodyParser.json());
 app.post('/enquireOrder', function(req, res){
 
     console.log('Inside Enquire Order')
-    console.log(req.body)
+//     console.log(req.body)
     var intent = req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
-    console.log(intent)
-    return res.json('Work Under Progress')
+    console.log("intent --->> ",intent)
+    
+    return res.json({
+        "outputSpeech": {
+          "type": "PlainText",
+          "text": "Plain text string to speak",
+          "ssml": "<speak>SSML text string to speak</speak>"
+        }
+    })
 })
 
 // app.post('/enquireOrder', function(req, res) {
