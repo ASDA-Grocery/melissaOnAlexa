@@ -29,7 +29,7 @@ app.post('enquireOrder', function(req, res){
 
     console.log('Inside Enquire Order')
     console.log(req)
-    res.json('Work Under Progress')
+    return res.json('Work Under Progress')
 })
 
 // app.post('/enquireOrder', function(req, res) {
