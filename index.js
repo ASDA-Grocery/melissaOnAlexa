@@ -29,7 +29,7 @@ app.post('/enquireOrder', function(req, res){
 
     console.log('Inside Enquire Order')
 //     console.log(req.body)
-    var intent = req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
+    var intent = req.body && req.body.request && req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
     console.log("intent --->> ",intent)
     return res.send('Work under progress')
     
