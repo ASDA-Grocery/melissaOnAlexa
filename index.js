@@ -44,12 +44,12 @@ app.post('/enquireOrder', function(req, res){
             type: 'PlainText',
             text: "Output Speech Text"
           },
-          card: {
-            type: 'Simple',
-            title: "Card Title",
-            subtitle: "Card Subtitle",
-            content: "Card Content"
-          },
+//           card: {
+//             type: 'Simple',
+//             title: "Card Title",
+//             subtitle: "Card Subtitle",
+//             content: "Card Content"
+//           },
           shouldEndSession: true
         }
     })
