@@ -33,38 +33,22 @@ app.post('/enquireOrder', function(req, res){
     console.log("intent --->> ",intent)
 //     return res.send('Work under progress')
     
-    return res.send({
-        "response": {
-            "outputSpeech": {
-              "type": "PlainText",
-              "text": "Plain text string to speak",
-              "ssml": "<speak>SSML text string to speak</speak>"
-            },
-            "card": {
-              "type": "Standard",
-              "title": "Title of the card",
-              "content": "Content of a simple card",
-              "text": "Text content for a standard card",
-              "image": {
-                "smallImageUrl": "https://url-to-small-card-image...",
-                "largeImageUrl": "https://url-to-large-card-image..."
-              }
-            },
-            "reprompt": {
-              "outputSpeech": {
-                "type": "PlainText",
-                "text": "Plain text string to speak",
-                "ssml": "<speak>SSML text string to speak</speak>"
-              }
-            },
-            "directives": [
-              {
-                "type": "InterfaceName.Directive"
-                (...properties depend on the directive type)
-              }
-            ],
-            "shouldEndSession": true
-          }
+    return res.send(null, {
+        version: req.version,
+        sessionAttributes: req.session.attribute || {},
+        response: {
+          outputSpeech: {
+            type: 'PlainText',
+            text: "Output Speech Text"
+          },
+          card: {
+            type: 'Simple',
+            title: "Card Title",
+            subtitle: "Card Subtitle",
+            content: "Card Content"
+          },
+          shouldEndSession: true
+        }
     })
 })
 
