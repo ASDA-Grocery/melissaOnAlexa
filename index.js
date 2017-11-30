@@ -31,14 +31,15 @@ app.post('/enquireOrder', function(req, res){
 //     console.log(req.body)
     var intent = req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
     console.log("intent --->> ",intent)
+    return res.send('Work under progress')
     
-    return res.json({
-        "outputSpeech": {
-          "type": "PlainText",
-          "text": "Plain text string to speak",
-          "ssml": "<speak>SSML text string to speak</speak>"
-        }
-    })
+//     return res.send({
+//         "outputSpeech": {
+//           "type": "PlainText",
+//           "text": "Plain text string to speak",
+//           "ssml": "<speak>SSML text string to speak</speak>"
+//         }
+//     })
 })
 
 // app.post('/enquireOrder', function(req, res) {
