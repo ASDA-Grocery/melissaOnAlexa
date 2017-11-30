@@ -35,7 +35,7 @@ app.post('/enquireOrder', function(req, res){
       , intent = req.body && req.body.request && req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
     console.log("intent --->> ",intent)
     
-    if(intent === 'checkOrderStatus'){
+    if(intent === 'Checkorderstatus'){
       console.log('Order Database :', orderData.orderDb);
       orderData.orderDb.forEach(function(element){
         if(element.status === 'open'){
