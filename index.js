@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.post('enquireOrder', function(req, res){
+app.post('/enquireOrder', function(req, res){
 
     console.log('Inside Enquire Order')
     console.log(req)
