@@ -28,13 +28,46 @@ app.use(bodyParser.json());
 app.post('/enquireOrder', function(req, res){
 
     console.log('Inside Enquire Order')
-//     console.log(req.body)
     var version = req && req.version ? req.version : 'no version'
-    var sessionAttributes =  req.session && req.session.attribute ? req.session.attribute : {}
-    var intent = req.body && req.body.request && req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
+      , speech = 'This is the default speech!'
+      , endSession = true
+      , sessionAttributes =  req.session && req.session.attribute ? req.session.attribute : {}
+      , intent = req.body && req.body.request && req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
     console.log("intent --->> ",intent)
-//     return res.send('Work under progress')
     
+    if(intent === 'checkOrderStatus'){
+      console.log('Order Database :', orderData.orderDb);
+      orderData.orderDb.forEach(function(element){
+        if(element.status === 'open'){
+          openCounter ++;
+        }
+      })
+      if(openCounter == 0){
+        speech = 'You have no open orders. Anything else I can help you with?'
+      }
+      else if(openCounter == 1){
+        orderData.orderDb.forEach(function(element){
+          if(element.status === 'open'){
+            var deliveryTimeRem = (element.deliveryTime - new Date())/60000;
+            speech = 'It has left our store and will reach you in the next '
+                      + Math.ceil(deliveryTimeRem) + ' minutes. Would you like me to help you with anything else?'
+          }
+        })
+      }
+      else{
+        speech = 'You have ' + openCounter + ' open orders.'
+        var tempCount = 1;
+        orderData.orderDb.forEach(function(element){
+          if(element.status === 'open'){
+            speech = speech + ' Order ' + tempCount + ' is for ' + element.value
+                     + ' and it was placed on ' + element.orderPlacementDate + '.'
+            tempCount++;
+          }
+        })
+        speech = speech + ' Which one should I check?'
+      }
+    }
+
     
     return res.send( {
         version: version,
@@ -42,15 +75,9 @@ app.post('/enquireOrder', function(req, res){
         response: {
           outputSpeech: {
             type: 'PlainText',
-            text: "Output Speech Text"
+            text: speech
           },
-//           card: {
-//             type: 'Simple',
-//             title: "Card Title",
-//             subtitle: "Card Subtitle",
-//             content: "Card Content"
-//           },
-          shouldEndSession: true
+          shouldEndSession: endSession
         }
     })
 })
