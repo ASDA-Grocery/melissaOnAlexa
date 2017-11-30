@@ -37,6 +37,7 @@ app.post('/enquireOrder', function(req, res){
     
     if(intent === 'Checkorderstatus'){
       console.log('Order Database :', orderData.orderDb);
+      var openCounter = 0;
       orderData.orderDb.forEach(function(element){
         if(element.status === 'open'){
           openCounter ++;
