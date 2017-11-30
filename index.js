@@ -36,7 +36,7 @@ app.post('/enquireOrder', function(req, res){
 //     return res.send('Work under progress')
     
     
-    return callback({null, {
+    return res.send({null, {
         version: version,
         sessionAttributes: sessionAttributes,
         response: {
