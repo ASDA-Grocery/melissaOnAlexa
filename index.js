@@ -30,6 +30,7 @@ app.post('/enquireOrder', function(req, res){
     console.log('Inside Enquire Order')
 //     console.log(req.body)
     var version = req && req.version ? req.version : 'no version'
+    var sessionAttributes =  req.session && req.session.attribute ? req.session.attribute : {}
     var intent = req.body && req.body.request && req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
     console.log("intent --->> ",intent)
 //     return res.send('Work under progress')
@@ -37,7 +38,7 @@ app.post('/enquireOrder', function(req, res){
     
     return res.send(null, {
         version: version,
-        sessionAttributes: req.session.attribute || {},
+        sessionAttributes: sessionAttributes,
         response: {
           outputSpeech: {
             type: 'PlainText',
