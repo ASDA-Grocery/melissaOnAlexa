@@ -69,7 +69,7 @@ app.post('/enquireOrder', function(req, res){
       }
     }
     
-    else if(intent === 'orderNo-status'){
+    else if(intent === 'OrdernoStatus'){
       var orderNo = req.body.request.intent.slots.ordernslot.value ? parseInt(wordsToNumbers(req.body.request.intent.slots.ordernslot.value)) : 'noOrderNumber'
       if(orderNo === 'noOrderNumber'){
         speech = 'Sorry! Not able to help you this time. Do you want me to help you with anything else?'
