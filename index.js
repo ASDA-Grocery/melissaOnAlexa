@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.post('/enquireOrder', function(req, res){
 
     console.log('Inside Enquire Order')
-    console.log(req)
+    console.log(req.body)
     return res.json('Work Under Progress')
 })
 
