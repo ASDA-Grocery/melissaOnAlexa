@@ -31,15 +31,41 @@ app.post('/enquireOrder', function(req, res){
 //     console.log(req.body)
     var intent = req.body && req.body.request && req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
     console.log("intent --->> ",intent)
-    return res.send('Work under progress')
+//     return res.send('Work under progress')
     
-//     return res.send({
-//         "outputSpeech": {
-//           "type": "PlainText",
-//           "text": "Plain text string to speak",
-//           "ssml": "<speak>SSML text string to speak</speak>"
-//         }
-//     })
+    return res.send({
+        "response": {
+            "outputSpeech": {
+              "type": "PlainText",
+              "text": "Plain text string to speak",
+              "ssml": "<speak>SSML text string to speak</speak>"
+            },
+            "card": {
+              "type": "Standard",
+              "title": "Title of the card",
+              "content": "Content of a simple card",
+              "text": "Text content for a standard card",
+              "image": {
+                "smallImageUrl": "https://url-to-small-card-image...",
+                "largeImageUrl": "https://url-to-large-card-image..."
+              }
+            },
+            "reprompt": {
+              "outputSpeech": {
+                "type": "PlainText",
+                "text": "Plain text string to speak",
+                "ssml": "<speak>SSML text string to speak</speak>"
+              }
+            },
+            "directives": [
+              {
+                "type": "InterfaceName.Directive"
+                (...properties depend on the directive type)
+              }
+            ],
+            "shouldEndSession": true
+          }
+    })
 })
 
 // app.post('/enquireOrder', function(req, res) {
