@@ -94,7 +94,7 @@ app.post('/enquireOrder', function(req, res){
       }
     }
     
-    else if(intent === 'orderDate-status'){
+    else if(intent === 'OrderdateStatus'){
       console.log('Checking by Date :', req.body.result.parameters)
       var orderDateDay = req.body.request.intent.slots.orderdatedayslot.value ? wordsToNumbers(req.body.request.intent.slots.orderdatedayslot.value) : 'noOrderDateDay'
       var orderDateMonth = req.body.request.intent.slots.orderdatemonthslot.value ? req.body.request.intent.slots.orderdatemonthslot.value : 'noOrderDateMonth'
