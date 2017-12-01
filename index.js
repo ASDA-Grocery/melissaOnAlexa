@@ -93,6 +93,33 @@ app.post('/enquireOrder', function(req, res){
         }
       }
     }
+    
+    else if(intent === 'orderDate-status'){
+      console.log('Checking by Date :', req.body.result.parameters)
+      var orderDateDay = req.body.request.intent.slots.orderdatedayslot.value ? wordsToNumbers(req.body.request.intent.slots.orderdatedayslot.value) : 'noOrderDateDay'
+      var orderDateMonth = req.body.request.intent.slots.orderdatemonthslot.value ? req.body.request.intent.slots.orderdatemonthslot.value : 'noOrderDateMonth'
+      if(orderDateDay === 'noOrderDateDay' && orderDateMonth === 'noOrderDateMonth'){
+        speech = 'Sorry! Not able to help you this time. Do you want me to help you with anything else?'
+      }
+      else{
+        for(var i = 0; i < orderData.orderDb.length; i++){
+          var tempOrderPlacementDate = orderData.orderDb[i].orderPlacementDate.toLowerCase()
+          var tempOrderDateDay = orderDateDay.toLowerCase()
+          var tempOrderDateMonth = orderDateMonth.toLowerCase()
+          if((tempOrderPlacementDate.indexOf(tempOrderDateDay) !== -1) && (tempOrderPlacementDate.indexOf(tempOrderDateMonth) !== -1)){
+            var deliveryTimeRem = (orderData.orderDb[i].deliveryTime - new Date())/60000;
+    //              speech = 'It has left our store and will reach you in the next '
+    //                       + Math.ceil(deliveryTimeRem) + ' minutes . Would you like me to help you with anything else?'
+            speech = 'Your order has been shipped and will reach you by 9 PM today. Would you like me to help you with anything else?'
+            if(orderData.orderDb[i].shipped === 'false'){
+              speech = 'It is yet to be shipped but will reach you on time. Anything else I can help you with?'
+            }
+            break;
+          }
+        }
+      }
+    }
+
 
     
     return res.send( {
@@ -108,86 +135,7 @@ app.post('/enquireOrder', function(req, res){
     })
 })
 
-// app.post('/enquireOrder', function(req, res) {
-//     console.log('Inside enquire order')
-//     var speech = 'This is the default speech'
-//       , openCounter = 0
-//       , contextOut
-//       , intent = req.body.result && req.body.result.metadata.intentName ? req.body.result.metadata.intentName : "noIntent"
-//       , contexts =  req.body.result && req.body.result.contexts ? req.body.result.contexts : "noContexts";
-// //       , accessToken = req.body.originalRequest.data.user.accessToken ? req.body.originalRequest.data.user.accessToken : 'noAccessToken';
-//     console.log('intent - > ', intent);
-//     console.log('contexts - > ', contexts);
-// //     if(accessToken === 'noAccessToken'){
-// //         speech = 'Please Login to you google account';
-// //          responseToAPI(speech);
-// //     }
-//     if(1 == 2){
-//         speech = 'Please Login to you google account';
-//     }
-//     else {
-// //         oauth2Client.setCredentials({
-// //           access_token:accessToken
-// //         });
 
-//         if(intent === 'checkOrderStatus'){
-//           console.log('Order Database :', orderData.orderDb);
-//           orderData.orderDb.forEach(function(element){
-//             if(element.status === 'open'){
-//               openCounter ++;
-//             }
-//           })
-//           if(openCounter == 0){
-//             speech = 'You have no open orders. Anything else I can help you with?'
-//           }
-//           else if(openCounter == 1){
-//             orderData.orderDb.forEach(function(element){
-//               if(element.status === 'open'){
-//                 var deliveryTimeRem = (element.deliveryTime - new Date())/60000;
-//                 speech = 'It has left our store and will reach you in the next '
-//                           + Math.ceil(deliveryTimeRem) + ' minutes. Would you like me to help you with anything else?'
-//               }
-//             })
-//           }
-//           else{
-//             speech = 'You have ' + openCounter + ' open orders.'
-//             var tempCount = 1;
-//             orderData.orderDb.forEach(function(element){
-//               if(element.status === 'open'){
-//                 speech = speech + ' Order ' + tempCount + ' is for ' + element.value
-//                          + ' and it was placed on ' + element.orderPlacementDate + '.'
-//                 tempCount++;
-//               }
-//             })
-//             speech = speech + ' Which one should I check?'
-//           }
-//           responseToAPI(speech);
-//         }
-//         else if(intent === 'orderNo-status'){
-//           var orderNo = req.body.result.parameters.orderN ? parseInt(wordsToNumbers(req.body.result.parameters.orderN)) : 'noOrderNumber'
-//           if(orderNo === 'noOrderNumber'){
-//             speech = 'Sorry! Not able to help you this time. Do you want me to help you with anything else?'
-//           }
-//           else{
-//             var orderCounter = 0;
-//             for(var i = 0; i < orderData.orderDb.length; i++){
-//               if(orderData.orderDb[i].status === 'open'){
-//                 orderCounter++;
-//                 if(orderCounter == orderNo){
-//                   var deliveryTimeRem = (orderData.orderDb[i].deliveryTime - new Date())/60000;
-// //                   speech = 'It has left our store and will reach you in the next '
-// //                             + Math.ceil(deliveryTimeRem) + ' minutes . Would you like me to help you with anything else?'
-//                      speech = 'Your order has been shipped and will reach you by 9 PM today. Would you like me to help you with anything else?'
-//                   if(orderData.orderDb[i].shipped === 'false'){
-//                     speech = 'It is yet to be shipped but will reach you on time. Anything else I can help you with?'
-//                   }
-//                   break;
-//                 }
-//               }
-//             }
-//           }
-//           responseToAPI(speech);
-//         }
 //         else if(intent === 'orderDate-status'){
 //           console.log('Checking by Date :', req.body.result.parameters)
 //           var orderDateDay = req.body.result.parameters.orderDateDay ? wordsToNumbers(req.body.result.parameters.orderDateDay) : 'noOrderDateDay'
