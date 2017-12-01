@@ -157,7 +157,62 @@ app.post('/enquireOrder', function(req, res){
       }
     }
 
-    
+    else if(intent === 'Changerecurringorderstatus'){
+      var shoppingListName = req.body.request.intent.slots.recurtimeslot.value ? req.body.request.intent.slots.recurtimeslot.value : 'noShoppingListName'
+      var shoppingStatus = req.body.request.intent.slots.recurstatusslot.value ? req.body.request.intent.slots.recurstatusslot.value : 'noShoppingStatus'
+      if(typeof shoppingListName === 'object'){
+        console.log('Shopping list name came as object')
+        var tempName = shoppingListName[0]
+        shoppingListName = tempName
+      }
+      if(shoppingListName === 'noShoppingListName'){
+        speech = 'Sorry! No such list exists. Something else I can help you with?'
+      }
+      else{
+        if(shoppingStatus === 'noShoppingStatus'){
+          speech = 'No a valid status. Please provide a valid status.'
+        }
+        else{
+          if(shoppingStatus === 'hold' ||shoppingStatus === 'pause' || shoppingStatus === 'stop'){
+            shoppingData.shoppingList[shoppingListName].status = 'hold';
+            console.log('status of the list : ',shoppingData.shoppingList[shoppingListName]);
+            var tempList = shoppingListName.charAt(0).toUpperCase() + shoppingListName.slice(1);
+            speech = "Sure. '" + tempList +  "' shopping list has been put on hold."
+          }
+          else if(shoppingStatus === 'resume' ||shoppingStatus === 'start' || shoppingStatus === 'restart' || shoppingStatus === 'active' || shoppingStatus === 'continue' || shoppingStatus === 'recommence'){
+            shoppingData.shoppingList[shoppingListName].status = 'active';
+            console.log('status of the list : ',shoppingData.shoppingList[shoppingListName]);
+            var tempList = shoppingListName.charAt(0).toUpperCase() + shoppingListName.slice(1);
+            var randomNum = 2;
+            //console.log('randomNum :',randomNum);
+            if(randomNum % 2 == 0){
+              console.log('Even');
+              var productNameString = '';
+              for (var product in openNotificationsData.openNotifications) {
+                if (openNotificationsData.openNotifications.hasOwnProperty(product)) {
+                  openNotificationsData.openNotifications[product].forEach(function(element){
+                    productNameString = productNameString + element.productName + ', ';
+                  })
+                }
+              }
+              productNameString = productNameString.slice(0, -2);
+              var tempIndex = productNameString.lastIndexOf(',');
+              var newProductNameString = productNameString.substr(0, tempIndex) + productNameString.substr(tempIndex+1, productNameString.length);
+              speech = "Sure. '" + tempList +  "' shopping list is now active. Also '" + newProductNameString
+                       + "' is back in stock. Would you like to add that to your "+ tempList + " list?"
+            }
+            else{
+              console.log('Odd');
+              speech = "Sure. '" + tempList +  "' shopping list is now active."
+            }
+          }
+          else{
+            speech = 'Not a valid status. Please provide a valid status.'
+          }
+        }
+      }
+    }
+
     
     return res.send( {
         version: version,
@@ -174,44 +229,7 @@ app.post('/enquireOrder', function(req, res){
 
 
 
-//         else if(intent === 'orderCost-status'){
-//           var orderCost = req.body.result.parameters.orderCost ? req.body.result.parameters.orderCost : 'noOrderCost'
-//           if(orderCost === 'noOrderCost'){
-//             speech = 'Sorry! Not able to help you this time. Do you want me to help you with anything else?';
-//           }
-//           else{
-//             var orderCounter = 0;
-//             var result;
-//             if(orderCost.indexOf('pounds') !== -1)
-//             {
-//               result = orderCost.replace("pounds", "£");
-//               orderCost = result;
-//             }
-//             else if(orderCost.indexOf('pound') !== -1 ){
-//               result = orderCost.replace("pound", "£");
-//               orderCost = result;
-//             }
 
-//             if(orderCost.indexOf('£') == 0){
-//               orderCost =  orderCost.substr(2, orderCost.length)
-//               orderCost = orderCost + ' £'
-//             }
-
-//             for(var i = 0; i < orderData.orderDb.length; i++){
-//               if(orderData.orderDb[i].value === orderCost){
-//                 var deliveryTimeRem = (orderData.orderDb[i].deliveryTime - new Date())/60000;
-// //              speech = 'It has left our store and will reach you in the next '
-// //                       + Math.ceil(deliveryTimeRem) + ' minutes . Would you like me to help you with anything else?'
-//                 speech = 'Your order has been shipped and will reach you by 9 PM today. Would you like me to help you with anything else?'
-//                 if(orderData.orderDb[i].shipped === 'false'){
-//                   speech = 'It is yet to be shipped but will reach you on time. Anything else I can help you with?'
-//                 }
-//                 break;
-//               }
-//             }
-//           }
-//           responseToAPI(speech);
-//         }
 
 //         else if(intent === 'changeRecurringOrderStatus'){
 //           var shoppingListName = req.body.result.parameters.recurTime ? req.body.result.parameters.recurTime : 'noShoppingListName'
