@@ -31,7 +31,7 @@ app.post('/enquireOrder', function(req, res){
     console.log(req.body.request)
     var version = req && req.version ? req.version : 'no version'
       , speech = 'This is the default speech!'
-      , endSession = true
+      , endSession = false
       , sessionAttributes =  req.session && req.session.attribute ? req.session.attribute : {}
       , intent = req.body && req.body.request && req.body.request.intent && req.body.request.intent.name ? req.body.request.intent.name : "noIntent"
     console.log("intent --->> ",intent)
