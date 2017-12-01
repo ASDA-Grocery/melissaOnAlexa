@@ -118,8 +118,32 @@ app.post('/enquireOrder', function(req, res){
         }
       }
     }
+    
+    else if(intent === 'OrdercostStatus'){
+      var orderCost = req.body.request.intent.slots.ordercostslot.value ? req.body.request.intent.slots.ordercostslot.value : 'noOrderCost'
+      if(orderCost === 'noOrderCost'){
+        speech = 'Sorry! Not able to help you this time. Do you want me to help you with anything else?';
+      }
+      else{
+        var orderCounter = 0;
+        var result;
+        if(orderCost.indexOf('pounds') !== -1)
+        {
+          result = orderCost.replace("pounds", "£");
+          orderCost = result;
+        }
+        else if(orderCost.indexOf('pound') !== -1 ){
+          result = orderCost.replace("pound", "£");
+          orderCost = result;
+        }
+        if(orderCost.indexOf('£') == 0){
+          orderCost =  orderCost.substr(2, orderCost.length)
+          orderCost = orderCost + ' £'
+        }
+      }
+    }
 
-
+    
     
     return res.send( {
         version: version,
@@ -135,32 +159,7 @@ app.post('/enquireOrder', function(req, res){
 })
 
 
-//         else if(intent === 'orderDate-status'){
-//           console.log('Checking by Date :', req.body.result.parameters)
-//           var orderDateDay = req.body.result.parameters.orderDateDay ? wordsToNumbers(req.body.result.parameters.orderDateDay) : 'noOrderDateDay'
-//           var orderDateMonth = req.body.result.parameters.orderDateMonth ? req.body.result.parameters.orderDateMonth : 'noOrderDateMonth'
-//           if(orderDateDay === 'noOrderDateDay' && orderDateMonth === 'noOrderDateMonth'){
-//             speech = 'Sorry! Not able to help you this time. Do you want me to help you with anything else?'
-//           }
-//           else{
-//             for(var i = 0; i < orderData.orderDb.length; i++){
-//               var tempOrderPlacementDate = orderData.orderDb[i].orderPlacementDate.toLowerCase()
-//               var tempOrderDateDay = orderDateDay.toLowerCase()
-//               var tempOrderDateMonth = orderDateMonth.toLowerCase()
-//               if((tempOrderPlacementDate.indexOf(tempOrderDateDay) !== -1) && (tempOrderPlacementDate.indexOf(tempOrderDateMonth) !== -1)){
-//                 var deliveryTimeRem = (orderData.orderDb[i].deliveryTime - new Date())/60000;
-// //              speech = 'It has left our store and will reach you in the next '
-// //                       + Math.ceil(deliveryTimeRem) + ' minutes . Would you like me to help you with anything else?'
-//                 speech = 'Your order has been shipped and will reach you by 9 PM today. Would you like me to help you with anything else?'
-//                 if(orderData.orderDb[i].shipped === 'false'){
-//                   speech = 'It is yet to be shipped but will reach you on time. Anything else I can help you with?'
-//                 }
-//                 break;
-//               }
-//             }
-//           }
-//           responseToAPI(speech);
-//         }
+
 //         else if(intent === 'orderCost-status'){
 //           var orderCost = req.body.result.parameters.orderCost ? req.body.result.parameters.orderCost : 'noOrderCost'
 //           if(orderCost === 'noOrderCost'){
